@@ -8,4 +8,28 @@
 * [open-falcon / falcon-plus](https://github.com/open-falcon/falcon-plus)
 * [Mr-Linus / DCMP](https://github.com/Mr-Linus/DCMP)
 
+后台管理采用的前端项目[puikinsh / gentelella](https://github.com/puikinsh/gentelella)
+
 [开发日志](https://serchaofan.github.io/2018/10/09/Laogu-Monitor%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/)
+
+目前的开发计划：
+* 主机与主机组的管理监控
+  * 主机CPU、内存、网络、负载
+  * 主机的添加、删除、修改
+* 服务的管理监控
+  * 服务的添加、删除、修改
+  * 服务的停止、启动等操作
+* 模板的定义及应用
+  * 主机的模板应用
+  * 主机组的模板应用
+  * 服务的模板应用
+* 容器管理监控
+  * 容器的创建、删除、修改
+  * 镜像管理
+  * 容器服务的监控
+* 用户管理
+  * 用户的添加、修改、删除
+  * 用户等级划分
+* 告警系统
+  * 告警分类（根据服务或主机告警给不同用户）
+  * 告警升级（设置阈值，对未能处理的告警进行等级提升，并通知更高一级的用户）
