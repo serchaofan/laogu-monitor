@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="row text-center vertical-middle-sm">
+  <h1>Login</h1>
+  <br><br>
+</div>
+<div>
+  <form action="login_handle/" method="post">
+    {% csrf_token %}
+    <div class="form-group row vertical-middle-sm">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <span><b>Username</b></span><input type="text" name="username" class="form-control" placeholder="Username">
+      </div>
+    </div>
+    <div class="form-group row vertical-middle-sm">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <span><b>Password</b></span><input type="password" name="password" class="form-control" placeholder="Password">
+      </div>
+    </div>
+    <div class="form-group row vertical-middle-sm">
+      <div class="col-md-4"></div>
+      <div class="col-md-1">
+        <span><b>验证码</b><input type="text" name="user_code" class="form-control"></span>
+      </div>
+      <div class="col-md-1"><img src="verifycode"></div>
+    </div>
+    <!--<input type="submit" value="Log in">-->
+    <button type="submit" class="btn btn-default center-block">Sign in</button>
+  </form>
+</div>
+{% endblock %}

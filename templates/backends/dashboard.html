@@ -1,0 +1,273 @@
+{% extends "control_base.html" %}
+{% block title %}Dashboard | Laogu_Monitor{% endblock title %}
+{% load static %}
+
+{% block main %}
+<!--Dashboard的最上面一行信息，包括主机数、服务数、容器数、镜像数、网络数-->
+<div class="row tile_count">
+  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+    <span class="count_top"><i class="fa fa-user"></i>  主机</span>
+    <div class="count">2500</div>
+    <span class="count_bottom"><i class="green">4% </i> From last Week</span>
+  </div>
+  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+    <span class="count_top"><i class="fa fa-clock-o"></i>  服务</span>
+    <div class="count">123.50</div>
+    <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span>
+  </div>
+  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+    <span class="count_top"><i class="fa fa-user"></i>  容器</span>
+    <div class="count green">2,500</div>
+    <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
+  </div>
+  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+    <span class="count_top"><i class="fa fa-user"></i>  镜像</span>
+    <div class="count">4,567</div>
+    <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span>
+  </div>
+  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+    <span class="count_top"><i class="fa fa-user"></i>  网络</span>
+    <div class="count">2,315</div>
+    <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
+  </div>
+  <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+    <span class="count_top"><i class="fa fa-user"></i>  磁盘</span>
+    <div class="count">7,325</div>
+    <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
+  </div>
+</div>
+<!--/Dashboard的最上面一行信息-->
+
+<!--本机信息概述块-->
+<div class="row">
+  <div class="col-md-12">
+    <div class="x_panel">
+      <!--<div class="x_title">-->
+        <!--<h2>信息栏</h2>-->
+        <!--<ul class="nav navbar-right panel_toolbox">-->
+        <!--<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>-->
+        <!--</li>-->
+        <!--<li class="dropdown">-->
+        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i-->
+        <!--class="fa fa-wrench"></i></a>-->
+        <!--<ul class="dropdown-menu" role="menu">-->
+        <!--<li><a href="#">Settings 1</a>-->
+        <!--</li>-->
+        <!--<li><a href="#">Settings 2</a>-->
+        <!--</li>-->
+        <!--</ul>-->
+        <!--</li>-->
+        <!--<li><a class="close-link"><i class="fa fa-close"></i></a>-->
+        <!--</li>-->
+        <!--</ul>-->
+        <!--<div class="clearfix"></div>-->
+      <!--</div>-->
+      <!--<div class="x_content">-->
+
+        <section class="content invoice">
+          <!-- title row -->
+          <div class="row">
+            <div class="col-xs-12 invoice-header">
+              <h1>
+                <i class="fa fa-desktop"></i> 本机信息
+              </h1>
+            </div>
+          </div>
+          <div class="row invoice-info">
+            <div class="col-sm-4 invoice-col">
+              From
+              <address>
+                <strong>Iron Admin, Inc.</strong>
+                <br>795 Freedom Ave, Suite 600
+                <br>New York, CA 94107
+                <br>Phone: 1 (804) 123-9876
+                <br>Email: ironadmin.com
+              </address>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+              To
+              <address>
+                <strong>John Doe</strong>
+                <br>795 Freedom Ave, Suite 600
+                <br>New York, CA 94107
+                <br>Phone: 1 (804) 123-9876
+                <br>Email: jon@ironadmin.com
+              </address>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+              <b>Invoice #007612</b>
+              <br>
+              <br>
+              <b>Order ID:</b> 4F3S8J
+              <br>
+              <b>Payment Due:</b> 2/22/2014
+              <br>
+              <b>Account:</b> 968-34567
+            </div>
+            <!-- /.col -->
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/本机概述-->
+
+<!--块信息（一行有三块）-->
+<div class="row">
+  <!--监控本机CPU块-->
+  <div class="col-md-4 col-sm-6 col-xs-12">
+    <div class="x_panel fixed_height_320">
+      <div class="x_title">
+        <h2>本机CPU负载</h2>
+        <div class="clearfix"></div>
+      </div>
+
+    </div>
+  </div>
+  <!--/监控本机CPU块-->
+
+  <!--监控本机MEM块-->
+  <div class="col-md-4 col-sm-6 col-xs-12">
+    <div class="x_panel fixed_height_320">
+      <div class="x_title">
+        <h2>本机MEM负载</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+      </div>
+    </div>
+  </div>
+  <!--/监控本机MEM块-->
+
+  <!--监控本机磁盘块-->
+  <div class="col-md-4 col-sm-6 col-xs-12">
+    <div class="x_panel fixed_height_320">
+      <div class="x_title">
+        <h2>本机磁盘</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+      </div>
+    </div>
+  </div>
+  <!--/监控本机磁盘块-->
+</div>
+
+<!--本机网络块-->
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="dashboard_graph">
+
+      <div class="row x_title">
+        <div class="col-md-6">
+          <h3>Network Activities
+            <small>Graph title sub-title</small>
+          </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/本机网络块-->
+
+<div class="row">
+  <div class="col-md-4 col-sm-6 col-xs-12">
+    <div id="local_cpu"></div>
+  </div>
+</div>
+
+<script>
+Highcharts.setOptions({
+	chart: {
+		type: 'solidgauge'
+	},
+	title: null,
+	pane: {
+		center: ['50%', '85%'],
+		size: '140%',
+		startAngle: -90,
+		endAngle: 90,
+		background: {
+			backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+			innerRadius: '60%',
+			outerRadius: '100%',
+			shape: 'arc'
+		}
+	},
+	tooltip: {
+		enabled: false
+	},
+	yAxis: {
+		stops: [
+			[0.1, '#55BF3B'], // green
+			[0.5, '#DDDF0D'], // yellow
+			[0.9, '#DF5353'] // red
+		],
+		lineWidth: 0,
+		minorTickInterval: null,
+		tickPixelInterval: 400,
+		tickWidth: 0,
+		title: {
+			y: -70
+		},
+		labels: {
+			y: 16
+		}
+	},
+	plotOptions: {
+		solidgauge: {
+			dataLabels: {
+				y: 5,
+				borderWidth: 0,
+				useHTML: true
+			}
+		}
+	}
+});
+var chart = Highcharts.chart('local_cpu', {
+	yAxis: {
+		min: 0,
+		max: 200,
+		title: {
+			text: '速度'
+		}
+	},
+	credits: {
+		enabled: false
+	},
+	series: [{
+		name: '速度',
+		data: [80],
+		dataLabels: {
+			format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+			((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
+			'<span style="font-size:12px;color:silver">km/h</span></div>'
+		},
+		tooltip: {
+			valueSuffix: ' km/h'
+		}
+	}]
+});
+setInterval(function () {
+	var point,
+		newVal,
+		inc;
+	if (chart1) {
+		point = chart1.series[0].points[0];
+		inc = Math.round((Math.random() - 0.5) * 100);
+		newVal = point.y + inc;
+		if (newVal < 0 || newVal > 200) {
+			newVal = point.y - inc;
+		}
+		point.update(newVal);
+	}
+}, 2000);
+</script>
+{% endblock main %}
+
+{% block jsfile %}
+<script src="{% static 'js/highcharts.js' %}"></script>
+{% endblock jsfile %}
