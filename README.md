@@ -8,7 +8,9 @@
 * [open-falcon / falcon-plus](https://github.com/open-falcon/falcon-plus)
 * [Mr-Linus / DCMP](https://github.com/Mr-Linus/DCMP)
 
-后台管理采用的前端项目[puikinsh / gentelella](https://github.com/puikinsh/gentelella)
+采用的前端[puikinsh / gentelella](https://github.com/puikinsh/gentelella)，基于BootStrap与JQuery
+采用的图表[highcharts / highcharts](https://github.com/highcharts/highcharts)
+采用的图标[FortAwesome / Font-Awesome](https://github.com/FortAwesome/Font-Awesome)
 
 [开发日志](https://serchaofan.github.io/2018/10/09/Laogu-Monitor%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/)
 
