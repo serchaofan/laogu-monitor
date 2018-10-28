@@ -89,7 +89,7 @@ class TriggerExpression(models.Model):
   trigger = models.ForeignKey('Trigger', verbose_name=u'所属触发器', on_delete=models.CASCADE)
   service = models.ForeignKey(Service, verbose_name=u'关联服务', on_delete=models.CASCADE)
   service_index = models.ForeignKey(ServiceIndex, verbose_name=u'关联服务指标', on_delete=models.CASCADE)
-  specified_index_key = models.CharField(u'只监控专门指定的指标key', max_length=64)
+  specified_index_key = models.CharField(u'只监控专门指定的指标key', max_length=64, blank=True)
   operator_type_choices = (
     ('eq', '='),
     ('lt', '<'),
@@ -129,7 +129,7 @@ class Trigger(models.Model):
   memo = models.TextField(u'备注', blank=True, null=True)
 
   def __str__(self):
-    return "<service: %s, severity: %s>" %(self.name, self.getseverity_display())
+    return "<service: %s, severity: %s>" %(self.name, self.severity)
 
 # 动作类
 class Action(models.Model):
