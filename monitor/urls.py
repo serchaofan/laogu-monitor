@@ -2,9 +2,9 @@ from django.conf.urls import url
 from . import views, userviews
 
 urlpatterns = [
-  url(r'^$', userviews.index),
-  url(r'^login/$', userviews.login_page),
-  url(r'verifycode/$', userviews.verifycode),
+  # url(r'^$', userviews.index),
+  url(r'^$', userviews.login_page),
+  # url(r'verifycode/$', userviews.verifycode),
   url(r'login_handle/$', userviews.user_login),
   url(r'logout_handle/$', userviews.user_logout),
   url(r'^dashboard/$', userviews.dashboard),

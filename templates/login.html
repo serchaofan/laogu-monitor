@@ -1,34 +1,74 @@
-{% extends "base.html" %}
-{% block title %}Login{% endblock %}
-{% block content %}
-<div class="row text-center vertical-middle-sm">
-  <h1>Login</h1>
-  <br><br>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Login | Laogu_Monitor</title>
+
+  <!-- Bootstrap -->
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+  <!-- NProgress -->
+  <link href="{% static 'css/nprogress.css' %}" rel="stylesheet">
+  <!-- Animate.css -->
+  <link href="{% static 'css/animate.min.css' %}" rel="stylesheet">
+
+  <!-- Custom Theme Style -->
+  <link href="{% static 'css/custom.min.css' %}" rel="stylesheet">
+
+  <link href="{% static 'fonts/fontawesome-webfont.ttf' %}" rel="stylesheet">
+  <link href="{% static 'fonts/fontawesome-webfont.woff' %}" rel="stylesheet">
+  <link href="{% static 'fonts/fontawesome-webfont.woff2' %}" rel="stylesheet">
+  <link href="{% static 'fonts/glyphicons-halflings-regular.ttf' %}" rel="stylesheet">
+  <link href="{% static 'fonts/glyphicons-halflings-regular.woff' %}" rel="stylesheet">
+  <link href="{% static 'fonts/glyphicons-halflings-regular.woff2' %}" rel="stylesheet">
+
+</head>
+
+<body class="login">
 <div>
-  <form action="login_handle/" method="post">
-    {% csrf_token %}
-    <div class="form-group row vertical-middle-sm">
-      <div class="col-md-4"></div>
-      <div class="col-md-4">
-        <span><b>Username</b></span><input type="text" name="username" class="form-control" placeholder="Username">
-      </div>
+  <a class="hiddenanchor" id="signup"></a>
+  <a class="hiddenanchor" id="signin"></a>
+
+  <div class="login_wrapper">
+    <div class="animate form login_form">
+      <section class="login_content">
+        <form action="login_handle/" method="post">
+          {% csrf_token %}
+          <h1>Login</h1>
+          <div>
+            <input type="text" class="form-control" name="username" placeholder="用户名"/>
+          </div>
+          <div>
+            <input type="password" class="form-control" name="password" placeholder="密码"/>
+          </div>
+          <!-- <div class="row">
+            <div class="col-md-3">
+              <input type="text" name="user_code" class="form-control" placeholder="验证码"/>
+            </div>
+            <div class="col-md-2">
+              <img src="verifycode">
+            </div>
+            <br/>
+          </div> -->
+          <div class="row">
+            <!--<button type="submit" class="btn btn-default center-block">Sign in</button>-->
+            <!--<div class="">-->
+            <input type="submit" class="btn btn-default submit center-block " value="Sign in"></a>
+            <!--</div>-->
+          </div>
+          <div class="clearfix"></div>
+        </form>
+      </section>
     </div>
-    <div class="form-group row vertical-middle-sm">
-      <div class="col-md-4"></div>
-      <div class="col-md-4">
-        <span><b>Password</b></span><input type="password" name="password" class="form-control" placeholder="Password">
-      </div>
-    </div>
-    <div class="form-group row vertical-middle-sm">
-      <div class="col-md-4"></div>
-      <div class="col-md-1">
-        <span><b>验证码</b><input type="text" name="user_code" class="form-control"></span>
-      </div>
-      <div class="col-md-1"><img src="verifycode"></div>
-    </div>
-    <!--<input type="submit" value="Log in">-->
-    <button type="submit" class="btn btn-default center-block">Sign in</button>
-  </form>
+  </div>
 </div>
-{% endblock %}
+{% include "footer.html" %}
+</body>
+</html>
