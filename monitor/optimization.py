@@ -21,7 +21,6 @@ class DataStore(object):
     #   ....
     # ]
     all_data = self.redis_obj.lrange(redis_key_name_latest, 1, -1)
-    # print(all_data)
     data_set = []
     for item in all_data:
       data = json.loads(item.decode())
@@ -98,19 +97,17 @@ class DataStore(object):
         for data_key, data_val in service_data.items():
           if data_key == 'has_sub_dic':
             continue
-          # print(data_key, data_val)
           try:
             tmp_optimized_data[data_key].append(round(float(data_val), 2))
             # print(tmp_optimized_data)
           except ValueError as e:
-            print("----error", e)
+            print("发生错误：", e)
             pass
         # tmp_optimized_data = {
         #    "CPU": [xx, xx ,xx ..],
         #    "user": [xx,xx,xx,xx....],
         #    "nice": [xx,xx,xx,xx...]
         # }
-        # print("tmp_optimized_data", tmp_optimized_data)
         for item_key, item_val in tmp_optimized_data.items():
           item_avg = self.average_data(item_val)
           item_max = self.max_data(item_val)
@@ -120,28 +117,28 @@ class DataStore(object):
 
     return optimized_data
 
-
+  # 求平均数
   def average_data(self, data_list):
     if len(data_list) > 0:
       return sum(data_list) / len(data_list)
     else:
       return 0
 
-
+  # 求最大值
   def max_data(self, data_list):
     if len(data_list) > 0:
       return max(data_list)
     else:
       return 0
 
-
+  # 求最小值
   def min_data(self, data_list):
     if len(data_list) > 0:
       return min(data_list)
     else:
       return 0
 
-
+  # 求中间值（数据表的下标中间的值）
   def mid_data(self, data_list):
     if len(data_list) > 0:
       data_list.sort()

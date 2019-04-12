@@ -1,6 +1,6 @@
 # from __future__ import unicode_literals
 from django.db import models
-from . import auth
+# from . import auth
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy
 
@@ -10,18 +10,8 @@ class Host(models.Model):
   name = models.CharField(u'主机名', max_length=64, unique=True)
   #ip地址
   ip_addr = models.GenericIPAddressField(u'IP地址', unique=True)
-  #主机群组
-  host_groups = models.ManyToManyField('HostGroup', verbose_name=u'主机组名', blank=True)
-  #模板
-  templates = models.ManyToManyField('Template', verbose_name=u'模板名', blank=True)
-  #监控选项
-  monitored_by_choices = (
-    ('agent', 'Agent'),
-    ('snmp', 'SNMP'),
-    ('wget', 'WGET'),
-  )
-  #监控项
-  monitored_by = models.CharField(u'监控方式', max_length=64, choices=monitored_by_choices)
+  # #监控项
+  # monitored_by = models.CharField(u'监控方式', max_length=64, choices=monitored_by_choices)
   #状态选项
   status_choices = (
     (1, 'Online'),

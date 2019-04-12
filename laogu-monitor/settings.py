@@ -50,7 +50,7 @@ DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.mysql',
     'NAME': 'monitor',
-    'USER': 'gutianyi',
+    'USER': 'root',
     'PASSWORD': 'redhat',
     'HOST': 'localhost',
     'PORT': '3306',
