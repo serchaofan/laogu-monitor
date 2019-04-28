@@ -1,0 +1,45 @@
+{% extends 'base/index_base.html' %}
+
+{% block main %}
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>容器网络列表</h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>网络短ID</th>
+              <th>网络名</th>
+{#              <th>连接的容器</th>#}
+              <th>驱动</th>
+              <th>类型</th>
+              <th>子网网段</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for network in network_list %}
+              <tr>
+                <td>{{ network.short_id }}</td>
+                <td><a href="/network/{{ network.short_id }}">{{ network.name }}</a></td>
+{#                <td>{% for net_containers in network.containers %}{% for container in net_containers %}{{ container.name }}|{% endfor %}{% endfor %}</td>#}
+{#                <td>{{ network.containers. }}</td>#}
+                <td>{{ network.attrs.Driver }}</td>
+                <td>{{ network.attrs.Scope }}</td>
+                <td>{{ network.attrs.IPAM.Config }}</td>
+{#                <td>{{ network.attrs }}</td>#}
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock main %}

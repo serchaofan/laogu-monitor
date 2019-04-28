@@ -12,23 +12,23 @@
           <table class="table table-hover">
             <thead>
             <tr>
-              <th>镜像短ID</th>
-              <th>镜像标签</th>
-              <th>镜像CMD</th>
-              <th>暴露端口</th>
-              <th>创建时间</th>
+              <th>数据卷短ID</th>
+              <th>数据卷名</th>
+              <th>数据卷驱动</th>
+              <th>数据卷类型</th>
+              <th>数据卷创建时间</th>
 {#              <th>attrs</th>#}
             </tr>
             </thead>
             <tbody>
-            {% for image in images_list %}
+            {% for volume in volume_list %}
               <tr>
-                <td>{{ image.short_id }}</td>
-                <td><a href="/image/{{ image.short_id }}">{{ image.tags }}</a></td>
-                <td>{{ image.attrs.Config.Cmd }}</td>
-                <td>{{ image.attrs.Config.ExposedPorts }}</td>
-                <td>{{ image.attrs.Created }}</td>
-{#                <td>{{ image.attrs }}</td>#}
+                <td>{{ volume.short_id }}</td>
+                <td><a href="/volume/{{ volume.short_id }}">{{ volume.name }}</a></td>
+                <td>{{ volume.attrs.Driver }}</td>
+                <td>{{ volume.attrs.Scope }}</td>
+                <td>{{ volume.attrs.CreatedAt }}</td>
+{#                <td>{{ volume.attrs }}</td>#}
               </tr>
             {% endfor %}
             </tbody>

@@ -17,6 +17,9 @@ urlpatterns = [
     url(r'^host/(\d+)/$', graphview.demo2),
     url(r'^containerlist/$', views.containers_status),
     url(r'^imagelist/$', views.images_status),
+    url(r'^networklist/$', views.network_status),
+    url(r'^volumelist/$', views.volume_status),
+    url(r'^eventlist/$', views.event_status),
     # 客户端配置接收，d为主机号
     url(r'^client_config/(\d+)/$', views.client_configs),
     # 客户端服务数据处理

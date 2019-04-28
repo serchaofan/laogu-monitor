@@ -14,9 +14,13 @@
             <tr>
               <th>容器短ID</th>
               <th>容器名</th>
-              <th>labels</th>
+{#              <th>labels</th>#}
               <th>image</th>
               <th>status</th>
+              <th>绑定端口</th>
+              <th>IP地址</th>
+              <th>创建时间</th>
+{#              <th>attrs</th>#}
             </tr>
             </thead>
             <tbody>
@@ -24,9 +28,14 @@
               <tr>
                 <td>{{ container.short_id }}</td>
                 <td><a href="/container/{{ container.id }}">{{ container.name }}</a></td>
-                <td>{{ container.labels }}</td>
+{#                <td>{{ container.labels }}</td>#}
                 <td>{{ container.image }}</td>
                 <td>{{ container.status }}</td>
+                <td>{{ container.attrs.HostConfig.PortBindings }}</td>
+{#                {% set NetworkName={{ container.attrs.HostConfig.NetworkMode }} %}{% endwith %}#}
+                <td>{{ container.attrs.NetworkSettings.Networks.IPAddress }}</td>
+                <td>{{ container.attrs.State.StartedAt }}</td>
+{#                <td>{{ container.attrs }}</td>#}
               </tr>
             {% endfor %}
             </tbody>

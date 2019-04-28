@@ -40,6 +40,7 @@ def demo1(request):
         top_info_dic=InfoGetter.index_top_info(info_getter),
         containers_list=InfoGetter.local_containers_info(info_getter),
         images_list=InfoGetter.local_images_info(info_getter),
+        event_list=InfoGetter.local_event_info(info_getter)
     )
     return HttpResponse(template.render(context, request))
 

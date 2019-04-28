@@ -52,6 +52,33 @@ def images_status(request):
     return render(request, 'imagelist.html', context)
 
 
+def network_status(request):
+    info_getter = InfoGetter()
+    network_list = info_getter.local_network_info()
+    context = dict(
+        network_list=network_list,
+    )
+    return render(request, 'networklist.html', context)
+
+
+def volume_status(request):
+    info_getter = InfoGetter()
+    volume_list = info_getter.local_volume_info()
+    context = dict(
+        volume_list=volume_list,
+    )
+    return render(request, 'volumelist.html', context)
+
+
+def event_status(request):
+    info_getter = InfoGetter()
+    event_list = info_getter.local_event_info()
+    context = dict(
+        event_list=event_list,
+    )
+    return render(request, 'eventlist.html', context)
+
+
 # 处理获取的客户端配置信息，client_id为接收的主机号，即client_config/(\d+)
 def client_configs(request, client_id):
     print("正在接收主机序号为", client_id, "的数据")

@@ -1,6 +1,6 @@
 {% extends "base/index_base.html" %}
 {% load staticfiles %}
-{% block title %}Dashboard | Laogu_Monitor{% endblock title %}
+{% block title %}LaoguMon{% endblock title %}
 {% block jsfile %}
   <script src="{% static 'js/echarts.js' %}"></script>
   <script src="{% static 'js/custom.min.js' %}"></script>
@@ -14,11 +14,6 @@
         <div class="count">{{ top_info_dic.hosts_count }}</div>
       </a>
     </div>
-    {#      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">#}
-    {#        <a href="#"><span class="count_top"><i class="fa fa-clock-o"></i>  服务</span>#}
-    {#          <div class="count">5</div>#}
-    {#        </a>#}
-    {#      </div>#}
     <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
       <a href="/containerlist"><span class="count_top"><i class="fa fa-user"></i>  容器</span>
         <div class="count green">{{ top_info_dic.containers_count }}</div>
@@ -30,13 +25,18 @@
       </a>
     </div>
     <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-      <a href="#"><span class="count_top"><i class="fa fa-user"></i>  网络</span>
-        <div class="count">3</div>
+      <a href="/networklist"><span class="count_top"><i class="fa fa-user"></i>  容器网络</span>
+        <div class="count">{{ top_info_dic.networks_count }}</div>
       </a>
     </div>
     <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
       <a href="#"><span class="count_top"><i class="fa fa-user"></i>  磁盘</span>
         <div class="count">4</div>
+      </a>
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+      <a href="/volumelist"><span class="count_top"><i class="fa fa-user"></i>  数据卷</span>
+        <div class="count">{{ top_info_dic.volumes_count }}</div>
       </a>
     </div>
   </div>
@@ -45,19 +45,11 @@
     <div class="col-md-12">
       <div class="x_panel">
         <div class="x_title">
-          <h2>Invoice Design
-            <small>Sample user invoice design</small>
-          </h2>
+          <h2><i class="fa fa-desktop"></i>  本机信息</h2>
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
           <section class="content invoice">
-            <!-- title row -->
-            <div class="row">
-              <div class="col-xs-12 invoice-header">
-                <h1><i class="fa fa-globe"></i>本机信息</h1>
-              </div>
-            </div>
             <div class="row invoice-info">
               <div class="col-sm-4 invoice-col">
                 Linux信息：{{ containers_list }}

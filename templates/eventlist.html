@@ -1,0 +1,41 @@
+{% extends 'base/index_base.html' %}
+
+{% block main %}
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>事件列表(最近一天)</h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>事件类型</th>
+              <th>事件动作</th>
+              <th>事件Scope</th>
+              <th>事件时间</th>
+              <th>事件Actor</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for event in event_list %}
+              <tr>
+                <td>{{ event.Type }}</td>
+                <td>{{ event.Action }}</td>
+                <td>{{ event.scope }}</td>
+                <td>{{ event.time }}</td>
+                <td>{{ event.Actor }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock main %}
