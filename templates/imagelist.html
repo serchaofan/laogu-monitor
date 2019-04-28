@@ -1,0 +1,38 @@
+{% extends 'base/index_base.html' %}
+
+{% block main %}
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>镜像列表</h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>镜像短ID</th>
+              <th>镜像标签</th>
+              <th>Labels</th>
+{#              <th>Tags</th>#}
+            </tr>
+            </thead>
+            <tbody>
+            {% for image in images_list %}
+              <tr>
+                <td>{{ image.short_id }}</td>
+                <td><a href="/image/{{ image.id }}">{{ image.tags }}</a></td>
+                <td>{{ image.labels }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock main %}

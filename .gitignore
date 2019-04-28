@@ -1,0 +1,6 @@
+/venv/
+/.vscode/
+db.sqlite3
+/monitor/migrations/
+/.idea/
+__pycache__/

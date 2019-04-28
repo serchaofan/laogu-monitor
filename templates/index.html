@@ -1,10 +1,158 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="text-center">
-  <h1>Laogu_Monitor demo</h1>
-</div>
-<div class="container">
-  <h4 class="text-center"><a href="login" name="login">用户登录</a></h4>
-</div>
+{% extends "base/index_base.html" %}
+{% load staticfiles %}
+{% block title %}Dashboard | Laogu_Monitor{% endblock title %}
+{% block jsfile %}
+  <script src="{% static 'js/echarts.js' %}"></script>
+  <script src="{% static 'js/custom.min.js' %}"></script>
+{% endblock jsfile %}
 
-{% endblock %}
+{% block main %}
+  <!--Dashboard的最上面一行信息，包括主机数、服务数、容器数、镜像数、网络数-->
+  <div class="row tile_count">
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+      <a href="/hostlist"><span class="count_top"><i class="fa fa-user"></i>  主机</span>
+        <div class="count">{{ top_info_dic.hosts_count }}</div>
+      </a>
+    </div>
+    {#      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">#}
+    {#        <a href="#"><span class="count_top"><i class="fa fa-clock-o"></i>  服务</span>#}
+    {#          <div class="count">5</div>#}
+    {#        </a>#}
+    {#      </div>#}
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+      <a href="/containerlist"><span class="count_top"><i class="fa fa-user"></i>  容器</span>
+        <div class="count green">{{ top_info_dic.containers_count }}</div>
+      </a>
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+      <a href="/imagelist"><span class="count_top"><i class="fa fa-user"></i>  镜像</span>
+        <div class="count">{{ top_info_dic.images_count }}</div>
+      </a>
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+      <a href="#"><span class="count_top"><i class="fa fa-user"></i>  网络</span>
+        <div class="count">3</div>
+      </a>
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+      <a href="#"><span class="count_top"><i class="fa fa-user"></i>  磁盘</span>
+        <div class="count">4</div>
+      </a>
+    </div>
+  </div>
+  <!--/Dashboard的最上面一行信息-->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>Invoice Design
+            <small>Sample user invoice design</small>
+          </h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <section class="content invoice">
+            <!-- title row -->
+            <div class="row">
+              <div class="col-xs-12 invoice-header">
+                <h1><i class="fa fa-globe"></i>本机信息</h1>
+              </div>
+            </div>
+            <div class="row invoice-info">
+              <div class="col-sm-4 invoice-col">
+                Linux信息：{{ containers_list }}
+              </div>
+              <!-- /.col -->
+              <div class="col-sm-4 invoice-col">
+                To
+                <address>
+                  <strong>John Doe</strong>
+                  <br>795 Freedom Ave, Suite 600
+                  <br>New York, CA 94107
+                  <br>Phone: 1 (804) 123-9876
+                  <br>Email: jon@ironadmin.com
+                </address>
+              </div>
+              <!-- /.col -->
+              <div class="col-sm-4 invoice-col">
+                <b>Invoice #007612</b>
+                <br>
+                <br>
+                <b>Order ID:</b> 4F3S8J
+                <br>
+                <b>Payment Due:</b> 2/22/2014
+                <br>
+                <b>Account:</b> 968-34567
+              </div>
+              <!-- /.col -->
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--块信息（一行有三块）-->
+  <div class="row">
+    <!--监控本机CPU块-->
+    <div class="col-md-8 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>本机CPU负载</h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          {{ page1|safe }}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>本机实时内存</h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content" style="height: 250px">
+          {{ mem_gauge|safe }}
+        </div>
+      </div>
+    </div>
+
+    <!--/监控本机CPU块-->
+
+    <!--监控本机MEM块-->
+    {#    <div class="col-md-4 col-sm-6 col-xs-12">#}
+    {#      <div class="x_panel fixed_height_320">#}
+    {#        <div class="x_title">#}
+    {#          <h2>本机MEM负载</h2>#}
+    {#          <div class="clearfix"></div>#}
+    {#        </div>#}
+    {#        <div class="x_content">#}
+    {#          {{ myechart2|safe }}#}
+    {#        </div>#}
+    {#      </div>#}
+    {#    </div>#}
+    <!--/监控本机MEM块-->
+  </div>
+
+  <div class="row">
+    <div class="container">
+      <div class="col-md-8 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Network Graph</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            {{ page2|safe }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--本机网络块-->
+
+{% endblock main %}
+

@@ -1,0 +1,17 @@
+Django==2.2
+dukpy==0.2.2
+future==0.17.1
+javascripthon==0.10
+Jinja2==2.10.1
+jupyter-echarts-pypkg==0.1.2
+lml==0.0.2
+macropy3==1.1.0b2
+MarkupSafe==1.1.1
+mysqlclient==1.4.2.post1
+Pillow==6.0.0
+pyecharts==0.5.11
+pyecharts-javascripthon==0.0.6
+pyecharts-jupyter-installer==0.0.3
+pytz==2019.1
+redis==3.2.1
+sqlparse==0.3.0
