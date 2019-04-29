@@ -1,5 +1,6 @@
 # laogu-monitor
 类zabbix分布式监控系统，基于Django开发
+![Travis (.org)](https://img.shields.io/travis/serchaofan/laogu-monitor.svg?style=flat-square)
 
 参考视频:[跟Alex学Python之- 如何写出NB吊炸天的分布式监控系统](http://edu.51cto.com/course/6208.html?source=so)
 
