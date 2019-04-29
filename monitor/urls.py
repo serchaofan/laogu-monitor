@@ -24,5 +24,5 @@ urlpatterns = [
     url(r'^client_config/(\d+)/$', views.client_configs),
     # 客户端服务数据处理
     url(r'^client_service_report/$', views.service_data_report),
-    # url(r'^admin/$', userview.admin_page)
+
 ]

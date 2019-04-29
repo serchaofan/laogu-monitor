@@ -1,6 +1,42 @@
 {% extends 'base/index_base.html' %}
+{% load staticfiles %}
+{% block jsfile %}
+  <script src="{% static 'js/jquery.dataTables.js' %}"></script>
+{% endblock jsfile %}
+{% block cssfile %}
+  <link rel="stylesheet" href="{% static 'css/jquery.dataTables.css' %}">
+{% endblock cssfile %}
+
+{% block jsscript %}
+  <script>
+      $(document).ready(function () {
+          $('#image_list').DataTable({
+              language: {
+                  url: "{% static 'datatable_chinese.json' %}"
+              }
+          });
+      });
+
+      var isCheckAll = false;
+
+      function swapCheck() {
+          if (isCheckAll) {
+              $("input[type='checkbox']").each(function () {
+                  this.checked = false;
+              });
+              isCheckAll = false;
+          } else {
+              $("input[type='checkbox']").each(function () {
+                  this.checked = true;
+              });
+              isCheckAll = true;
+          }
+      }
+  </script>
+{% endblock jsscript %}
 
 {% block main %}
+
   <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
       <div class="x_panel">
@@ -9,26 +45,28 @@
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-          <table class="table table-hover">
+          <table id="image_list" class="table table-hover">
             <thead>
             <tr>
+              <th><input type="checkbox" onclick="swapCheck()"/></th>
               <th>镜像短ID</th>
               <th>镜像标签</th>
               <th>镜像CMD</th>
               <th>暴露端口</th>
               <th>创建时间</th>
-{#              <th>attrs</th>#}
+              {#              <th>attrs</th>#}
             </tr>
             </thead>
             <tbody>
             {% for image in images_list %}
               <tr>
-                <td>{{ image.short_id }}</td>
+                <td><input type="checkbox" value="{{ image.name }}" name="image_name"/></td>
+                <td><a href="/image/{{ image.short_id }}">{{ image.short_id }}</a></td>
                 <td><a href="/image/{{ image.short_id }}">{{ image.tags }}</a></td>
                 <td>{{ image.attrs.Config.Cmd }}</td>
                 <td>{{ image.attrs.Config.ExposedPorts }}</td>
                 <td>{{ image.attrs.Created }}</td>
-{#                <td>{{ image.attrs }}</td>#}
+                {#                <td>{{ image.attrs }}</td>#}
               </tr>
             {% endfor %}
             </tbody>

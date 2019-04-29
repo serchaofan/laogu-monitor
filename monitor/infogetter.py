@@ -2,10 +2,14 @@ from . import models
 from psutil import *
 import docker
 import datetime
+from django.conf import settings
+from .redis_con import redis_connect
+import json
 
 class InfoGetter(object):
     def __init__(self):
         self.client = docker.from_env()
+        self.redisobj = redis_connect(settings)
 
     def index_top_info(self):
         '''
@@ -20,12 +24,15 @@ class InfoGetter(object):
         networks_count_num = len(self.client.networks.list())
         volumes_count_num = len(self.client.volumes.list())
 
+        local_sys_info_dic = self.client.info()
+
         top_info_dic = dict(
             hosts_count=hosts_count_num,
             containers_count=containers_count_num,
             images_count=images_count_num,
             networks_count=networks_count_num,
             volumes_count=volumes_count_num,
+            local_sys_info=local_sys_info_dic,
         )
         return top_info_dic
 
@@ -73,3 +80,8 @@ class InfoGetter(object):
     #     disk_io_list = disk_io_counters()
     #
     #     return disk_list
+
+    def host_info(self, hostid):
+        info_list = self.redisobj.lrange("monitor-{}-linux-hostinfo-latest".format(hostid), -1, -1)
+        info_dic = json.loads(info_list[0])[0]
+        return info_dic

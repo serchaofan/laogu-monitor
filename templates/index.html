@@ -1,8 +1,12 @@
 {% extends "base/index_base.html" %}
 {% load staticfiles %}
 {% block title %}LaoguMon{% endblock title %}
+{% block metablock %}
+  <meta http-equiv="refresh" content="30">
+{% endblock metablock %}
+
 {% block jsfile %}
-  <script src="{% static 'js/echarts.js' %}"></script>
+  <script src="{% static 'js/echarts.js' %}" xmlns="http://www.w3.org/1999/html"></script>
   <script src="{% static 'js/custom.min.js' %}"></script>
 {% endblock jsfile %}
 
@@ -45,38 +49,31 @@
     <div class="col-md-12">
       <div class="x_panel">
         <div class="x_title">
-          <h2><i class="fa fa-desktop"></i>  本机信息</h2>
+          <h2><i class="fa fa-desktop"></i> 本机信息</h2>
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
           <section class="content invoice">
-            <div class="row invoice-info">
+            <div class="row invoice-info" style="font-size: 15px">
               <div class="col-sm-4 invoice-col">
-                Linux信息：{{ containers_list }}
+                本机主机名：{{ top_info_dic.local_sys_info.Name }}
               </div>
-              <!-- /.col -->
               <div class="col-sm-4 invoice-col">
-                To
-                <address>
-                  <strong>John Doe</strong>
-                  <br>795 Freedom Ave, Suite 600
-                  <br>New York, CA 94107
-                  <br>Phone: 1 (804) 123-9876
-                  <br>Email: jon@ironadmin.com
-                </address>
+                Linux内核：{{ top_info_dic.local_sys_info.KernelVersion }}
               </div>
-              <!-- /.col -->
               <div class="col-sm-4 invoice-col">
-                <b>Invoice #007612</b>
-                <br>
-                <br>
-                <b>Order ID:</b> 4F3S8J
-                <br>
-                <b>Payment Due:</b> 2/22/2014
-                <br>
-                <b>Account:</b> 968-34567
+                操作系统：{{ top_info_dic.local_sys_info.OperatingSystem }}
               </div>
-              <!-- /.col -->
+              <div class="col-sm-4 invoice-col">
+                Arch：{{ top_info_dic.local_sys_info.Architecture }}
+              </div>
+              <div class="col-sm-4 invoice-col">
+                Docker版本：{{ top_info_dic.local_sys_info.ServerVersion }}
+              </div>
+              <div class="col-sm-4 invoice-col">
+                Docker镜像仓库：{% for mirror in top_info_dic.local_sys_info.RegistryConfig.Mirrors %}{{ mirror }}
+                <br>{% endfor %}
+              </div>
             </div>
           </section>
         </div>

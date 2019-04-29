@@ -1,6 +1,28 @@
 {% extends 'base/index_base.html' %}
+{% block metablock %}
+  <meta http-equiv="refresh" content="30">
+{% endblock metablock %}
+
+{% load staticfiles %}
+{% block jsfile %}
+  <script src="{% static 'js/jquery.dataTables.js' %}"></script>
+{% endblock jsfile %}
+{% block cssfile %}
+  <link rel="stylesheet" href="{% static 'css/jquery.dataTables.css' %}">
+{% endblock cssfile %}
+
 
 {% block main %}
+  <script>
+      $(document).ready(function () {
+          $('#event_list').DataTable({
+              language: {
+                  url: "{% static 'datatable_chinese.json' %}"
+              }
+          });
+      });
+  </script>
+
   <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
       <div class="x_panel">
@@ -9,7 +31,7 @@
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-          <table class="table table-hover">
+          <table id="event_list" class="table table-hover table-striped">
             <thead>
             <tr>
               <th>事件类型</th>

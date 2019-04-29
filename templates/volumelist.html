@@ -1,4 +1,39 @@
 {% extends 'base/index_base.html' %}
+{% load staticfiles %}
+{% block jsfile %}
+  <script src="{% static 'js/jquery.dataTables.js' %}"></script>
+{% endblock jsfile %}
+{% block cssfile %}
+  <link rel="stylesheet" href="{% static 'css/jquery.dataTables.css' %}">
+{% endblock cssfile %}
+
+{% block jsscript %}
+  <script>
+      $(document).ready(function () {
+          $('#volume_list').DataTable({
+              language: {
+                  url: "{% static 'datatable_chinese.json' %}"
+              }
+          });
+      });
+
+      var isCheckAll = false;
+
+      function swapCheck() {
+          if (isCheckAll) {
+              $("input[type='checkbox']").each(function () {
+                  this.checked = false;
+              });
+              isCheckAll = false;
+          } else {
+              $("input[type='checkbox']").each(function () {
+                  this.checked = true;
+              });
+              isCheckAll = true;
+          }
+      }
+  </script>
+{% endblock jsscript %}
 
 {% block main %}
   <div class="row">
@@ -9,15 +44,16 @@
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-          <table class="table table-hover">
+          <table id="volume_list" class="table table-hover">
             <thead>
             <tr>
+              <th><input type="checkbox" onclick="swapCheck()"/></th>
               <th>数据卷短ID</th>
               <th>数据卷名</th>
               <th>数据卷驱动</th>
               <th>数据卷类型</th>
               <th>数据卷创建时间</th>
-{#              <th>attrs</th>#}
+              {#              <th>attrs</th>#}
             </tr>
             </thead>
             <tbody>
@@ -28,7 +64,7 @@
                 <td>{{ volume.attrs.Driver }}</td>
                 <td>{{ volume.attrs.Scope }}</td>
                 <td>{{ volume.attrs.CreatedAt }}</td>
-{#                <td>{{ volume.attrs }}</td>#}
+                {#                <td>{{ volume.attrs }}</td>#}
               </tr>
             {% endfor %}
             </tbody>

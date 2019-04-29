@@ -37,7 +37,7 @@ class DataStore(object):
         return data_set
 
     def process_and_save(self):
-        print("------------service data------------")
+        # print("------------service data------------")
         # status为0，data有效
         if self.data['status'] == 0:
             for key, val in settings.DATA_OPTIMIZATION.items():
@@ -85,36 +85,42 @@ class DataStore(object):
             # }
             tmp_optimized_data = {}
             for key in service_data_keys:
-                if key == 'has_sub_dic':
+                if key == 'has_sub_dic' or 'is_info':
                     continue
                 optimized_data[key] = []
+                print("ORIGINAL_optimized_data------", optimized_data)
             tmp_optimized_data = copy.deepcopy(optimized_data)
             # 分离data_set中的各个子列表，即[{\"iowait\": \"0.00\",...."}, 1540111739.1343265],
             # 获取service_data和last_save_time
             for service_data, last_save_time in data_set:
-                # print(data_set)
+                # print("data_set:", data_set)
                 # 再分离service_data中每个子项，即iowait: XX, steal: XX ....
                 # 分别存入data_key和data_val
                 for data_key, data_val in service_data.items():
-                    if data_key == 'has_sub_dic':
+                    if data_key == 'has_sub_dic' or 'is_info':
                         continue
                     try:
-                        tmp_optimized_data[data_key].append(round(float(data_val), 2))
-                        # print("temp_optimized_data: ", tmp_optimized_data)
+                        if service_data_vals['is_info'] == 'False':
+                            tmp_optimized_data[data_key].append(round(float(data_val), 2))
+                        elif service_data_vals['is_info'] == 'True':
+                            tmp_optimized_data[data_key].append(data_val)
+                        print("temp_optimized_data: ", tmp_optimized_data)
                     except ValueError as e:
                         print("发生错误：", e)
                         pass
+
                 # tmp_optimized_data = {
                 #    "CPU": [xx, xx ,xx ..],
                 #    "user": [xx,xx,xx,xx....],
                 #    "nice": [xx,xx,xx,xx...]
                 # }
-                for item_key, item_val in tmp_optimized_data.items():
-                    item_avg = self.average_data(item_val)
-                    item_max = self.max_data(item_val)
-                    item_min = self.min_data(item_val)
-                    item_mid = self.mid_data(item_val)
-                    optimized_data[item_key] = [item_avg, item_max, item_min, item_mid]
+                if service_data_vals['is_info'] == 'False':
+                    for item_key, item_val in tmp_optimized_data.items():
+                        item_avg = self.average_data(item_val)
+                        item_max = self.max_data(item_val)
+                        item_min = self.min_data(item_val)
+                        item_mid = self.mid_data(item_val)
+                        optimized_data[item_key] = [item_avg, item_max, item_min, item_mid]
         # print(optimized_data)
         return optimized_data
 

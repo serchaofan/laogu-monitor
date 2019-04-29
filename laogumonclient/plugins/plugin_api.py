@@ -1,4 +1,4 @@
-from .linux import cpu, mem, net
+from .linux import cpu, mem, net, host_info
 
 
 def get_linux_cpu():
@@ -11,3 +11,7 @@ def get_linux_mem():
 
 def get_linux_net():
     return net.monitor()
+
+
+def get_host_info():
+    return host_info.monitor()

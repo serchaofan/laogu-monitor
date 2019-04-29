@@ -18,6 +18,7 @@ def monitor():
             'so': so,
             'status': status,
             'used_rent': used_rent,
-            'has_sub_dic': False
+            'has_sub_dic': False,
+            'is_info': 'False',
         }
     return value_dic

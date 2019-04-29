@@ -20,7 +20,7 @@ class ClientHandle(object):
         request_type = settings.configs['urls']['get_configs'][1]
         # 获取请求URL以及hostid
         url = "%s/%s" % (settings.configs['urls']['get_configs'][0], settings.configs['HostID'])
-        print("url: %s" % url)
+        # print("url: %s" % url)
         # latest_configs = json.loads(self.url_request(request_type, url).decode('utf-8'))
         latest_configs = json.loads(self.url_request(request_type, url))
         print("latest config: ", latest_configs)
@@ -50,16 +50,14 @@ class ClientHandle(object):
                 monitor_interval = val[1]
                 last_invoke_time = val[2]
                 if (time.time() - last_invoke_time) > monitor_interval:
-                    print(last_invoke_time, time.time())
+                    # print(last_invoke_time, time.time())
                     self.monitored_services['services'][service_name][2] = time.time()
                     # 启动一个新线程去调用插件（就是获取系统信息的小函数）
                     t = threading.Thread(target=self.invoke_plugin, args=(service_name, val))
                     t.start()
-                    print("Going to monitor [%s]" % service_name)
-                else:
-                    print(
-                        "Going to monitor [%s] in [%2.3f] secs" % (
-                            service_name, monitor_interval - (time.time() - last_invoke_time)))
+                    # print("Going to monitor [%s]" % service_name)
+                # else:
+                #     print("Going to monitor [%s] in [%2.3f] secs" % (service_name, monitor_interval - (time.time() - last_invoke_time)))
             time.sleep(1)
 
     def invoke_plugin(self, service_name, val):
@@ -104,28 +102,28 @@ class ClientHandle(object):
         abs_url = "http://%s:%s/%s" % (settings.configs['Server'],
                                        settings.configs["ServerPort"],
                                        url)
-        print(abs_url)
+        # print(abs_url)
         if request_type in ('get', 'GET'):
             # print(abs_url, extra_data)
             try:
                 req = request.Request(abs_url)
                 with request.urlopen(req, timeout=settings.configs['RequestTimeout']) as f:
                     response = f.read()
-                print("response: %s" % response)
+                # print("response: %s" % response)
                 return response
             except error.URLError as e:
                 exit("\033[31;1m%s\033[0m" % e)
 
         elif request_type in ('post', 'POST'):
-            print(abs_url, extra_data['params'])
+            # print(abs_url, extra_data['params'])
             try:
                 data_encode = parse.urlencode(extra_data['params']).encode(encoding='UTF8')
-                print(data_encode)
+                # print(data_encode)
                 req = request.Request(url=abs_url, data=data_encode)
                 with request.urlopen(req, timeout=settings.configs['RequestTimeout']) as f:
                     response = f.read()
                 response = json.loads(response.decode('utf-8'))
-                print("\033[31;1m[%s]:[%s]\033[0m response:\n%s" % (request_type, abs_url, response))
+                # print("\033[31;1m[%s]:[%s]\033[0m response:\n%s" % (request_type, abs_url, response))
                 return response
             except HTTPError as e:
                 print(e.read())

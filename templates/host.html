@@ -1,5 +1,8 @@
 {% extends 'base/index_base.html' %}
 {% load staticfiles %}
+{% block metablock %}
+  <meta http-equiv="refresh" content="30">
+{% endblock metablock %}
 
 {% block jsfile %}
   <script src="{% static 'js/echarts.js' %}"></script>
@@ -7,34 +10,35 @@
 
 {% block main %}
   <div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="col-md-12">
       <div class="x_panel">
         <div class="x_title">
-          <h2>主机列表</h2>
+          <h2><i class="fa fa-desktop"></i> 主机号：{{ hostobj.id }} 主机名：{{ hostobj.name }}</h2>
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-          <table class="table table-hover">
-            <thead>
-            <tr>
-              <th>主机号</th>
-              <th>主机名</th>
-              <th>IP地址</th>
-              <th>主机组</th>
-              <th>状态</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>{{ hostobj.id }}</td>
-              <td><a href="/host/{{ hostobj.id }}">{{ hostobj.name }}</a></td>
-              <td>{{ hostobj.ip_addr }}</td>
-              <td>{% for group in hostobj.host_group %}{{ group }}|{% endfor %}</td>
-              <td>{{ hostobj.status }}</td>
-            </tr>
-            </tbody>
-          </table>
-
+          <section class="content invoice">
+            <div class="row invoice-info" style="font-size: 15px">
+              <div class="col-sm-4 invoice-col">
+                IP地址：{{ hostobj.ip_addr }}
+              </div>
+              <div class="col-sm-4 invoice-col">
+                主机组：{% for group in hostobj.host_group %}{{ group }} | {% endfor %}
+              </div>
+              <div class="col-sm-4 invoice-col">
+                CPU数量：{{ hostinfo.cpu_count_num }}
+              </div>
+              <div class="col-sm-4 invoice-col">
+                CPU逻辑数量：{{ hostinfo.cpu_count_logical_num }}
+              </div>
+              <div class="col-sm-4 invoice-col">
+                内存大小：{{ hostinfo.virtual_memory_total }}
+              </div>
+              <div class="col-sm-4 invoice-col">
+                Swap大小：{{ hostinfo.swap_memory_total }}
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </div>
@@ -45,7 +49,7 @@
     <div class="col-md-8 col-sm-12 col-xs-12">
       <div class="x_panel">
         <div class="x_title">
-          <h2>本机CPU负载</h2>
+          <h2>CPU负载</h2>
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
@@ -56,7 +60,7 @@
     <div class="col-md-4 col-sm-12 col-xs-12">
       <div class="x_panel">
         <div class="x_title">
-          <h2>本机实时内存</h2>
+          <h2>实时内存</h2>
           <div class="clearfix"></div>
         </div>
         <div class="x_content" style="height: 250px">
@@ -71,7 +75,7 @@
       <div class="col-md-8 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Network Graph</h2>
+            <h2>网络</h2>
             <div class="clearfix"></div>
           </div>
           <div class="x_content">

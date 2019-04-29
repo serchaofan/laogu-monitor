@@ -2,7 +2,7 @@ from psutil import *
 
 
 def monitor():
-    nic_list_data = net_io_counters(pernic=True)
+    nic_list_data = net_io_counters(pernic=True, nowrap=False)
 
     value_dict = {
         # 'inet_name': '',
@@ -11,7 +11,9 @@ def monitor():
         'packets_sent': '',
         'packets_recv': '',
         'status': 0,
-        'has_sub_dic': False
+        'has_sub_dic': False,
+        'is_info': 'False',
+        # 'sub_dic_key': [],
     }
 
     # for nic_data_name in nic_list_data:

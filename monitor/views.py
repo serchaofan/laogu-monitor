@@ -21,7 +21,7 @@ REDIS_OBJ = redis_connect(settings)
 def hosts_status(request):
     hosts_data_serializer = StatusSerializer(request, REDIS_OBJ)
     hosts_data = hosts_data_serializer.by_hosts()
-    print("host_data", hosts_data)
+    # print("host_data", hosts_data)
     # host_data = [data, data, data,...]
     # data = {
     # 'id': host_obj.id,
@@ -85,7 +85,7 @@ def client_configs(request, client_id):
     # 调用序列化模块serializer的方法
     config_obj = ClientHandler(client_id)
     config = config_obj.fetch_configs()
-    print(config)
+    print("config---------\n", config)
 
     if config:
         return HttpResponse(json.dumps(config))
@@ -100,10 +100,10 @@ def service_data_report(request):
         'service_name': '0',
         'data': '0'
     }
-    print(request.method)
+    # print(request.method)
     if request.method == 'POST':
         try:
-            print('host=%s, service=%s' % (request.POST.get('client_id'), request.POST.get('service_name')))
+            # print('host=%s, service=%s' % (request.POST.get('client_id'), request.POST.get('service_name')))
             data = json.loads(request.POST['data'])
             # 例：StatusData_1_memory_latest
             client_id = request.POST.get('client_id')
@@ -116,7 +116,7 @@ def service_data_report(request):
             client_data_report['service_name'] = service_name
             client_data_report['data'] = data
 
-            print("client_data_report", client_data_report)
+            # print("client_data_report", client_data_report)
         except IndexError as e:
             print('报错：', e)
     return HttpResponse(json.dumps(client_data_report))

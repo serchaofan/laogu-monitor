@@ -22,6 +22,7 @@ def monitor():
             'steel': steel,
             'idle': idle,
             'status': status,
-            'has_sub_dic': False
+            'has_sub_dic': False,
+            'is_info': 'False'
         }
     return value_dic

@@ -23,16 +23,17 @@ def cpu_line(line, redis_key, cpu_item):
     max = []
     # 最小值
     min = []
-    cpu_item_name = cpu_item
-    cpu_item = []
-
     # 时间x轴
     time_xaxis = []
+
+    cpu_item_name = cpu_item
+    cpu_item = []
 
     redis_obj = redis_connect(settings)
     list = redis_obj.lrange(redis_key, -30, -1)
 
     for a in list:
+        # print("-----------------", a)
         b = json.loads(a)[0]
         timestamp = json.loads(a)[1]
         time_xaxis.append(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(timestamp)))
@@ -71,11 +72,45 @@ def cpu_line(line, redis_key, cpu_item):
 
 # def cpu_line_latest(line, cpu_item):
 
-
-def net_line_latest(line, net_item):
+def cpu_line_latest(line):
     time_xaxis = []
-    net_item_name = net_item
-    net_item = []
+    # cpu_item_name = cpu_item
+    # print(cpu_item)
+    # cpu_item = []
+    user = []
+    system = []
+    idle = []
+
+    redis_obj = redis_connect(settings)
+    list = redis_obj.lrange("monitor-1-linux-cpu-latest", -30, -1)
+    for a in list:
+        b = json.loads(a)[0]
+        timestamp = json.loads(a)[1]
+        time_xaxis.append(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(timestamp)))
+        user.append(b["user"])
+        system.append(b['system'])
+        idle.append(b['idle'])
+
+    line.add("user", time_xaxis, user,
+             is_smooth=True,
+            isfill=True,
+             )
+    line.add("idle", time_xaxis, idle,
+             is_smooth=True,
+            isfill=True,
+             )
+    line.add("system", time_xaxis, system,
+             is_smooth=True,
+            isfill=True,
+             )
+    return line
+
+
+def net_line_packets_latest(line):
+    time_xaxis = []
+    # net_item_name = net_item
+    packets_recv = []
+    packets_sent = []
 
     redis_obj = redis_connect(settings)
     list = redis_obj.lrange("monitor-1-linux-net-latest", -30, -1)
@@ -84,11 +119,42 @@ def net_line_latest(line, net_item):
         b = json.loads(a)[0]
         timestamp = json.loads(a)[1]
         time_xaxis.append(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(timestamp)))
-        net_item.append(b[net_item_name])
+        packets_recv.append(round(int(b['packets_recv'])/1000))
+        packets_sent.append(round(int(b['packets_sent'])/1000))
 
-    line.add(net_item_name, time_xaxis, net_item,
+    line.add("packets_recv", time_xaxis, packets_recv,
              is_smooth=True,
-             yaxis_name="接收包数量/个",
+             yaxis_name="接收包数量/千个",
+             )
+    line.add("packets_sent-", time_xaxis, packets_sent,
+             is_smooth=True,
+             yaxis_name="发送包数量/千个",
+             )
+    return line
+
+def net_line_bytes_latest(line):
+    time_xaxis = []
+    # net_item_name = net_item
+    bytes_recv = []
+    bytes_sent = []
+
+    redis_obj = redis_connect(settings)
+    list = redis_obj.lrange("monitor-1-linux-net-latest", -30, -1)
+
+    for a in list:
+        b = json.loads(a)[0]
+        timestamp = json.loads(a)[1]
+        time_xaxis.append(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(timestamp)))
+        bytes_recv.append(round(int(b['bytes_recv'])/1000))
+        bytes_sent.append(round(int(b['bytes_sent'])/1000))
+
+    line.add("bytes_recv", time_xaxis, bytes_recv,
+             is_smooth=True,
+             yaxis_name="kB",
+             )
+    line.add("bytes_sent", time_xaxis, bytes_sent,
+             is_smooth=True,
+             yaxis_name="kB",
              )
     return line
 

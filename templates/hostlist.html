@@ -1,6 +1,27 @@
 {% extends 'base/index_base.html' %}
+{% block metablock %}
+  <meta http-equiv="refresh" content="30">
+{% endblock metablock %}
+
+{% load staticfiles %}
+{% block jsfile %}
+  <script src="{% static 'js/jquery.dataTables.js' %}"></script>
+{% endblock jsfile %}
+{% block cssfile %}
+  <link rel="stylesheet" href="{% static 'css/jquery.dataTables.css' %}">
+{% endblock cssfile %}
 
 {% block main %}
+  <script>
+      $(document).ready(function () {
+          $('#host_list').DataTable({
+              language: {
+                  url: "{% static 'datatable_chinese.json' %}"
+              }
+          });
+      });
+  </script>
+
   <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
       <div class="x_panel">
@@ -9,7 +30,7 @@
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-          <table class="table table-hover">
+          <table id="host_list" class="table table-hover">
             <thead>
             <tr>
               <th>主机号</th>
@@ -25,7 +46,7 @@
                 <td>{{ host.id }}</td>
                 <td><a href="/host/{{ host.id }}">{{ host.name }}</a></td>
                 <td>{{ host.ip_addr }}</td>
-                <td>{% for group in host.host_group %}{{ group }}|{% endfor %}</td>
+                <td>{% for group in host.host_group %}{{ group }} | {% endfor %}</td>
                 <td>{{ host.status }}</td>
               </tr>
             {% endfor %}
