@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% block jsfile %}
   <script src="{% static 'js/jquery.dataTables.js' %}"></script>
+  {#  <script src="{% static 'js/listcheck.js' %}"></script>#}
 {% endblock jsfile %}
 {% block cssfile %}
   <link rel="stylesheet" href="{% static 'css/jquery.dataTables.css' %}">
@@ -17,21 +18,28 @@
           });
       });
 
-      var isCheckAll = false;
+      $('#select_all').click(function () {
+          var checkVal = $(this).prop('checked');
+          $('#network_tb input').prop('checked', checkVal);
+      });
 
-      function swapCheck() {
-          if (isCheckAll) {
-              $("input[type='checkbox']").each(function () {
-                  this.checked = false;
-              });
-              isCheckAll = false;
-          } else {
-              $("input[type='checkbox']").each(function () {
-                  this.checked = true;
-              });
-              isCheckAll = true;
-          }
-      }
+      $('#network_tb input').click(function () {
+          var numOfAll = $('#network_tb input').length;
+          var numOfSelected = $('#network_tb input:checked').length;
+          console.log("numOfAll:" + numOfAll + "\nnumOfSelected:" + numOfSelected);
+          $('#select_all').prop('checked', numOfAll == numOfSelected);
+      });
+
+      var network_list = []
+      $('#btn-delete').click(function () {
+          $('#network_tb input:checked').each(function () {
+              network_list.push($(this).val());
+          });
+          $("input[name=net_id]").attr("value", network_list);
+          {#alert(network_list);#}
+          {#alert($("input[name=net_id]").attr('value'));#}
+      });
+
   </script>
 {% endblock jsscript %}
 
@@ -44,38 +52,102 @@
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-          <table id="network_list" class="table table-hover">
-            <thead>
-            <tr>
-              <th><input type="checkbox" onclick="swapCheck()"/></th>
-              <th>网络短ID</th>
-              <th>网络名</th>
-              {#              <th>连接的容器</th>#}
-              <th>驱动</th>
-              <th>类型</th>
-              <th>子网网段</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for network in network_list %}
+          <form class="form-horizontal form-label-left" method="post" action="/network_delete_handle/">
+          {% csrf_token %}
+            <table id="network_list" class="table table-hover">
+              <thead>
               <tr>
-                <td>{{ network.short_id }}</td>
-                <td><a href="/network/{{ network.short_id }}">{{ network.name }}</a></td>
-                {#                <td>{% for net_containers in network.containers %}{% for container in net_containers %}{{ container.name }}|{% endfor %}{% endfor %}</td>#}
-                {#                <td>{{ network.containers. }}</td>#}
-                <td>{{ network.attrs.Driver }}</td>
-                <td>{{ network.attrs.Scope }}</td>
-                <td>{{ network.attrs.IPAM.Config }}</td>
-                {#                <td>{{ network.attrs }}</td>#}
+                <th><input type="checkbox" id="select_all"></th>
+                <th>网络短ID</th>
+                <th>网络名</th>
+                <th>驱动</th>
+                <th>类型</th>
+                <th>子网网段</th>
               </tr>
-            {% endfor %}
-            </tbody>
-          </table>
-
+              </thead>
+              <tbody id="network_tb">
+              {% for network in network_list %}
+                <tr>
+                  <td><input type="checkbox" value="{{ network.short_id }}" name="net_id"></td>
+                  <td>{{ network.short_id }}</td>
+                  <td>{{ network.name }}</td>
+                  {#                <td>{% for net_containers in network.containers %}{% for container in net_containers %}{{ container.name }}|{% endfor %}{% endfor %}</td>#}
+                  {#                <td>{{ network.containers. }}</td>#}
+                  <td>{{ network.attrs.Driver }}</td>
+                  <td>{{ network.attrs.Scope }}</td>
+                  <td>{% for config in network.attrs.IPAM.Config %}{{ config }} , {% endfor %}</td>
+                  {#                <td>{{ network.attrs }}</td>#}
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+            <div class="row" id="operate-btn">
+              <div class="container col-md-offset-4 col-sm-offset-4 col-xs-offset-4">
+                <button type="submit" name="operation" class="btn btn-danger" value="delete" id="btn-delete">删除</button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
 
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>网络创建</h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <form class="form-horizontal form-label-left" method="post" action="/network_create_handle/" novalidate>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">网络名</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input type="text" name="name" class="form-control">
+              </div>
+            </div>
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">驱动</label>
+              <div class="col-md-3 col-sm-3 col-xs-4">
+                <select name="driver" class="form-control">
+                  <option value="bridge">bridge</option>
+                  <option value="macvlan">macvlan</option>
+                  <option value="overlay">overlay</option>
+                </select>
+              </div>
+            </div>
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">适用范围</label>
+              <div class="col-md-3 col-sm-3 col-xs-4">
+                <select name="scope" class="form-control">
+                  <option value="local">local</option>
+                  <option value="global">global</option>
+                  <option value="swarm">swarm</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">子网网段</label>
+              <div class="col-md-3 col-sm-3 col-xs-6">
+                <input type="text" name="subnet" class="form-control" placeholder="子网IP（CIDR形式）">
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-6">
+                <input type="text" name="gateway" class="form-control" placeholder="网关IP">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-6 col-md-offset-3">
+                <button type="submit" class="btn btn-success">提交</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
 {% endblock main %}

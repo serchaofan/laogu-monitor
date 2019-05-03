@@ -1,0 +1,100 @@
+{% extends 'base/index_base.html' %}
+{% load staticfiles %}
+{% block jsfile %}
+  <script src="{% static 'js/jquery.dataTables.js' %}"></script>
+{% endblock jsfile %}
+{% block cssfile %}
+  <link rel="stylesheet" href="{% static 'css/jquery.dataTables.css' %}">
+{% endblock cssfile %}
+
+{% block jsscript %}
+  <script>
+      $(document).ready(function () {
+          $('#search_image_list').DataTable({
+              language: {
+                  url: "{% static 'datatable_chinese.json' %}"
+              },
+              order: [[2, 'desc']]
+          });
+      });
+
+      {#$('#search_btn').click(function () {#}
+      {#    setTimeout(function () {#}
+      {#        $('#search_image_list').show();#}
+      {#    }, 3000);#}
+      {#});#}
+
+  </script>
+{% endblock jsscript %}
+
+{% block main %}
+
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>搜索镜像列表</h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <table id="search_image_list" class="table table-hover">
+            <thead>
+            <tr>
+              <th>镜像名</th>
+              <th>镜像描述</th>
+              <th>star数</th>
+              <th>官方</th>
+              <th>自动构建</th>
+            </tr>
+            </thead>
+            <tbody id="image_tb">
+            {% for image in search_imagelist %}
+              <tr>
+                <td>{{ image.name }}</td>
+                <td>{{ image.description }}</td>
+                <td>{{ image.star_count }}</td>
+                <td>{{ image.is_official }}</td>
+                <td>{{ image.is_automated }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>镜像拉取</h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <form class="form-horizontal form-label-left" method="post" action="/image_operate_handle/" novalidate>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">镜像</label>
+              <div class="col-md-3 col-sm-3 col-xs-4">
+                <input type="text" name="image_name" class="form-control" placeholder="镜像名">
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-4">
+                <input type="text" name="image_tag" class="form-control" placeholder="镜像tag，若不指定则默认拉取latest">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-3 col-md-offset-3">
+                <button type="submit" class="btn btn-primary" name="operation" value="search" id="search_btn">查询</button>
+                <button type="submit" class="btn btn-success" name="operation" value="pull" id="pull_btn">拉取</button>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock main %}

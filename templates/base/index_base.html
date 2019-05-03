@@ -8,7 +8,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {% block metablock %}{% endblock metablock %}
+
   <script src="{% static 'js/jquery.min.js' %}"></script>
+
   {% block jsfile %}{% endblock jsfile %}
   <title>{% block title %}{% endblock title %}</title>
 
@@ -54,32 +56,16 @@
               <li><a href="/hostlist"><i class="fa fa-server"></i><span>Hosts</span></a></li>
               <li><a href="/containerlist"><i class="fa fa-cubes"></i><span>Containers</span></a></li>
               <li><a href="/imagelist"><i class="fa fa-tasks"></i><span>Images</span></a></li>
-              <li><a href="/networklist"><i class="fa fa-tasks"></i><span>Container Networks</span></a></li>
-              <li><a href="/volumelist"><i class="fa fa-tasks"></i><span>Container Volumes</span></a></li>
-              <li><a href="/eventlist"><i class="fa fa-tasks"></i><span>Container Events</span></a></li>
-              <li><a href="/imagelist"><i class="fa fa-tasks"></i><span>Disks</span></a></li>
-              <li><a><i class="fa fa-home"></i><span>Users</span></a></li>
+              <li><a href="/networklist"><i class="fa fa-sitemap"></i><span>Container Networks</span></a></li>
+              <li><a href="/volumelist"><i class="fa fa-hdd-o"></i><span>Container Volumes</span></a></li>
+              <li><a href="/eventlist"><i class="fa fa-newspaper-o"></i><span>Container Events</span></a></li>
+{#              <li><a href="/imagelist"><i class="fa fa-tasks"></i><span>Disks</span></a></li>#}
+              <li><a><i class="fa fa-user"></i><span>Users</span></a></li>
             </ul>
           </div>
         </div>
         <!--/左侧菜单主体-->
 
-        <!--左侧底栏-->
-        <div class="sidebar-footer hidden-small">
-          <a data-toggle="tooltip" data-placement="top" title="Settings">
-            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-          </a>
-          {#          <a data-toggle="tooltip" data-placement="top" title="FullScreen">#}
-          {#            <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>#}
-          {#          </a>#}
-          {#          <a data-toggle="tooltip" data-placement="top" title="Lock">#}
-          {#            <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>#}
-          {#          </a>#}
-          <a data-toggle="tooltip" data-placement="top" title="Logout" href="logout_handle/">
-            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-          </a>
-        </div>
-        <!--/左侧底栏-->
       </div>
     </div>
     <!--/左侧栏-->

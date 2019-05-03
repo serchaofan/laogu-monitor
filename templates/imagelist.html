@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% block jsfile %}
   <script src="{% static 'js/jquery.dataTables.js' %}"></script>
+  {#  <script src="{% static 'js/listcheck.js' %}"></script>#}
 {% endblock jsfile %}
 {% block cssfile %}
   <link rel="stylesheet" href="{% static 'css/jquery.dataTables.css' %}">
@@ -17,21 +18,26 @@
           });
       });
 
-      var isCheckAll = false;
+      $('#select_all').click(function () {
+          var checkVal = $(this).prop('checked');
+          $('#image_tb input').prop('checked', checkVal);
+      });
 
-      function swapCheck() {
-          if (isCheckAll) {
-              $("input[type='checkbox']").each(function () {
-                  this.checked = false;
-              });
-              isCheckAll = false;
-          } else {
-              $("input[type='checkbox']").each(function () {
-                  this.checked = true;
-              });
-              isCheckAll = true;
-          }
-      }
+      var image_list = []
+
+      $('#image_tb input').click(function () {
+          var numOfAll = $('#image_tb input').length;
+          var numOfSelected = $('#image_tb input:checked').length;
+          console.log("numOfAll:" + numOfAll + "\nnumOfSelected:" + numOfSelected);
+          $('#select_all').prop('checked', numOfAll == numOfSelected);
+      });
+      $('#btn-delete').click(function () {
+          $('#image_tb input:checked').each(function () {
+              image_list.push($(this).val());
+          });
+          $("input[name=image_id]").attr("value", image_list);
+      });
+
   </script>
 {% endblock jsscript %}
 
@@ -45,37 +51,78 @@
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-          <table id="image_list" class="table table-hover">
-            <thead>
-            <tr>
-              <th><input type="checkbox" onclick="swapCheck()"/></th>
-              <th>镜像短ID</th>
-              <th>镜像标签</th>
-              <th>镜像CMD</th>
-              <th>暴露端口</th>
-              <th>创建时间</th>
-              {#              <th>attrs</th>#}
-            </tr>
-            </thead>
-            <tbody>
-            {% for image in images_list %}
+          <form class="form-horizontal form-label-left" method="post" action="/image_delete_handle/">
+            {% csrf_token %}
+            <table id="image_list" class="table table-hover">
+              <thead>
               <tr>
-                <td><input type="checkbox" value="{{ image.name }}" name="image_name"/></td>
-                <td><a href="/image/{{ image.short_id }}">{{ image.short_id }}</a></td>
-                <td><a href="/image/{{ image.short_id }}">{{ image.tags }}</a></td>
-                <td>{{ image.attrs.Config.Cmd }}</td>
-                <td>{{ image.attrs.Config.ExposedPorts }}</td>
-                <td>{{ image.attrs.Created }}</td>
-                {#                <td>{{ image.attrs }}</td>#}
+                <th><input type="checkbox" id="select_all"></th>
+                <th>镜像短ID</th>
+                <th>镜像标签</th>
+                <th>镜像CMD</th>
+                <th>暴露端口</th>
+                <th>创建时间</th>
+                {#              <th>attrs</th>#}
               </tr>
-            {% endfor %}
-            </tbody>
-          </table>
-
+              </thead>
+              <tbody id="image_tb">
+              {% for image in images_list %}
+                <tr>
+                  <td><input type="checkbox" value="{{ image.short_id }}" name="image_id"></td>
+                  <td>{{ image.short_id }}</td>
+                  <td>{% for tag in image.tags %}{{ tag }} , {% endfor %}</td>
+                  <td>{{ image.attrs.Config.Cmd }}</td>
+                  <td>{{ image.attrs.Config.ExposedPorts }}</td>
+                  <td>{{ image.attrs.Created }}</td>
+                  {#                <td>{{ image.attrs }}</td>#}
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+            <div class="row" id="operate-btn">
+              <div class="container col-md-offset-4 col-sm-offset-4 col-xs-offset-4">
+                <button type="submit" name="operation" class="btn btn-danger" value="delete" id="btn-delete">删除</button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
 
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>镜像拉取</h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <form class="form-horizontal form-label-left" method="post" action="/image_operate_handle/" novalidate>
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">镜像名</label>
+              <div class="col-md-3 col-sm-3 col-xs-4">
+                <input type="text" name="image_name" class="form-control" placeholder="镜像名">
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-4">
+                <input type="text" name="image_tag" class="form-control" placeholder="镜像tag，若不指定则默认拉取latest">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-3 col-md-offset-3">
+                <button type="submit" class="btn btn-primary" name="operation" value="search" id="search_btn">查询
+                </button>
+                <button type="submit" class="btn btn-success" name="operation" value="pull" id="pull_btn">拉取</button>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
 
 {% endblock main %}

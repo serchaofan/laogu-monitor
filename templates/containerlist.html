@@ -2,9 +2,13 @@
 {% load staticfiles %}
 {% block jsfile %}
   <script src="{% static 'js/jquery.dataTables.js' %}"></script>
+  {#  <script src="{% static 'js/icheck.js' %}"></script>#}
+  {#    <script src="{% static 'js/jquery.inputmask.bundle.js' %}"></script>#}
+  {#  <script src="{% static 'js/listcheck.js' %}"></script>#}
 {% endblock jsfile %}
 {% block cssfile %}
   <link rel="stylesheet" href="{% static 'css/jquery.dataTables.css' %}">
+{#  <link rel="stylesheet" href="{% static 'css/icheck-square.css' %}">#}
   <link rel="stylesheet" href="{% static 'css/buttons.dataTables.css' %}">
   <link rel="stylesheet" href="{% static 'css/select.dataTables.css' %}">
 {% endblock cssfile %}
@@ -12,27 +16,47 @@
 {% block jsscript %}
   <script>
       $(document).ready(function () {
-          $('#container_list').DataTable({
+          $('#list').DataTable({
               language: {
                   url: "{% static 'datatable_chinese.json' %}"
               }
           });
       });
-      var isCheckAll = false;
 
-      function swapCheck() {
-          if (isCheckAll) {
-              $("input[type='checkbox']").each(function () {
-                  this.checked = false;
-              });
-              isCheckAll = false;
-          } else {
-              $("input[type='checkbox']").each(function () {
-                  this.checked = true;
-              });
-              isCheckAll = true;
+
+      function f(obj) {
+          if (obj.options[obj.selectedIndex].value == "on-failure" | obj.options[obj.selectedIndex].value == "always") {
+              document.getElementById("onfailure").style.display = "";
+              $('input[name=autoremove]').prop('disabled', true);
+              $('input[name=autoremove]').prop('checked', false);
+          }
+          else {
+              document.getElementById("onfailure").style.display = "none";
+              $('input[name=autoremove]').prop('disabled', false);
           }
       }
+
+      $('#select_all').click(function () {
+          var checkVal = $(this).prop('checked');
+          $('#c_tb input').prop('checked', checkVal);
+      });
+
+
+      var container_list = []
+
+      $('#c_tb input').click(function () {
+          var numOfAll = $('#c_tb input').length;
+          var numOfSelected = $('#c_tb input:checked').length;
+          console.log("numOfAll:" + numOfAll + "\nnumOfSelected:" + numOfSelected);
+          $('#select_all').prop('checked', numOfAll == numOfSelected);
+      });
+      $('#btn-start,#btn-restart,#btn-delete,#btn-stop').click(function () {
+          $('#c_tb input:checked').each(function () {
+              container_list.push($(this).val());
+          });
+          {#console.log(container_list);#}
+          $("input[name=con_shortid]").attr("value", container_list);
+      });
   </script>
 {% endblock jsscript %}
 
@@ -45,44 +69,63 @@
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-          <table id="container_list" class="table table-hover">
-            <thead>
-            <tr>
-              <th><input type="checkbox" onclick="swapCheck()"/></th>
-              <th>容器短ID</th>
-              <th>容器名</th>
-              {#              <th>labels</th>#}
-              <th>image</th>
-              <th>status</th>
-              <th>绑定端口</th>
-              <th>IP地址</th>
-              <th>创建时间</th>
-              {#              <th>attrs</th>#}
-            </tr>
-            </thead>
-            <tbody>
-            {% for container in containers_list %}
+          <form class="form-horizontal form-label-left" method="post" action="/container_operate_handle/">
+            {% csrf_token %}
+            <table id="list" class="table table-hover">
+              <thead>
               <tr>
-                <td><input type="checkbox" value="{{ container.name }}" name="container_name"/></td>
-                <td>{{ container.short_id }}</td>
-                <td><a href="/container/{{ container.id }}">{{ container.name }}</a></td>
-                {#                <td>{{ container.labels }}</td>#}
-                <td>{{ container.image }}</td>
-                <td>{{ container.status }}</td>
-                <td>{{ container.attrs.HostConfig.PortBindings }}</td>
-                {#                {% set NetworkName={{ container.attrs.HostConfig.NetworkMode }} %}{% endwith %}#}
-                <td>{{ container.attrs.NetworkSettings.Networks.IPAddress }}</td>
-                <td>{{ container.attrs.State.StartedAt }}</td>
-                {#                <td>{{ container.attrs }}</td>#}
+                <th><input type="checkbox" id="select_all"></th>
+                <th>容器短ID</th>
+                <th>容器名</th>
+                <th>镜像</th>
+                <th>状态</th>
+                <th>绑定端口</th>
+                {#              <th>IP地址</th>#}
+                <th>创建时间</th>
               </tr>
-            {% endfor %}
-            </tbody>
-          </table>
+              </thead>
+              <tbody id="c_tb">
+              {% for container in containers_list %}
+                <tr>
+                  <td><input type="checkbox" value="{{ container.short_id }}" name="con_shortid"></td>
+                  <td>{{ container.short_id }}</td>
+                  <td>{{ container.name }}</td>
+                  <td>{{ container.image }}</td>
+                  <td>
+                    {% if container.status == 'exited' %}
+                      <div class="label label-danger">{{ container.status }}</div>
+                    {% elif container.status == 'stopped' %}
+                      <div class="label label-warning">{{ container.status }}</div>
+                    {% else %}
+                      <div class="label label-success">{{ container.status }}</div>
+                    {% endif %}
+                  </td>
+                  <td>{{ container.attrs.HostConfig.PortBindings }}</td>
+                  {#                                {% set NetworkName={{ container.attrs.HostConfig.NetworkMode }} %}{% endwith %}#}
+                  {#                <td>{{ container.attrs.NetworkSettings.Networks }}</td>#}
+                  <td>{{ container.attrs.State.StartedAt }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+
+            </table>
+            <div class="row" id="operate-btn">
+              <div class="container col-md-offset-4 col-sm-offset-4 col-xs-offset-4">
+                <button type="submit" name="operation" class="btn btn-primary" value="start" id="btn-start">启动</button>
+                <button type="submit" name="operation" class="btn btn-info" value="restart" id="btn-restart">重启</button>
+                <button type="submit" name="operation" class="btn btn-warning" value="stop" id="btn-stop">停止</button>
+                <button type="submit" name="operation" class="btn btn-danger" value="delete" id="btn-delete">删除</button>
+              </div>
+            </div>
+          </form>
 
         </div>
+
       </div>
     </div>
   </div>
+
+  {#  # 容器添加#}
   <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
       <div class="x_panel">
@@ -94,83 +137,111 @@
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
+          <form class="form-horizontal form-label-left" method="post" action="/container_create_handle/" novalidate>
+            {#容器名#}
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">容器名</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input type="text" name="name" class="form-control col-md-7 col-xs-12">
+              </div>
+            </div>
+            {#镜像#}
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">镜像<span> *</span></label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input type="text" name="image" required="required" class="form-control col-md-7 col-xs-12">
+              </div>
+            </div>
+            {#开放端口#}
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">端口映射</label>
+              <div class="col-md-3 col-sm-3 col-xs-12">
+                <input type="number" name="internal_port" class="form-control" placeholder="容器内端口">
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-12">
+                <input type="number" name="exposed_port" class="form-control" placeholder="暴露端口">
+              </div>
+            </div>
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">协议</label>
+              <div class="col-md-1 col-sm-1 col-xs-2">
+                <b>TCP  </b><input type="radio" name="protocol" value="tcp" checked>
+              </div>
+              <div class="col-md-1 col-sm-1 col-xs-2">
+                <b>UDP  </b><input type="radio" name="protocol" value="udp">
+              </div>
+            </div>
+            {#网络#}
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">网络</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input type="text" name="network" class="form-control col-md-7 col-xs-12">
+              </div>
+            </div>
+            {#数据卷#}
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">数据卷</label>
+              <div class="col-md-2 col-sm-2 col-xs-3">
+                <input type="text" name="localpath" class="form-control" placeholder="本地路径">
+              </div>
+              <div class="col-md-2 col-sm-2 col-xs-3">
+                <input type="text" name="bindpath" class="form-control" placeholder="绑定容器内路径">
+              </div>
+              <div class="col-md-2 col-sm-2 col-xs-3">
+                <input type="text" name="bind_option" class="form-control" placeholder="选项">
+              </div>
+            </div>
+            {#CMD#}
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">CMD</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input type="text" name="cmd" class="optional form-control col-md-7 col-xs-12">
+              </div>
+            </div>
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">容器主机名</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input type="text" name="hostname" class="form-control col-md-7 col-xs-12">
+              </div>
+            </div>
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">CPU限制</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input type="number" name="cpushares" class="form-control col-md-7 col-xs-12">
+              </div>
+            </div>
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">内存限制</label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input type="text" name="memlimit" class="form-control col-md-7 col-xs-12">
+              </div>
+            </div>
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">Auto Remove</label>
+              <div class="col-md-1 col-sm-1 col-xs-1">
+                <input type="checkbox" name="autoremove" value="on">
+              </div>
+            </div>
+            <div class="item form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">Auto Restart</label>
+              <div class="col-md-3 col-sm-3 col-xs-4">
+                <select name="autorestart" class="form-control" onchange="f(this)">
+                  <option value="no">no</option>
+                  <option value="always">always</option>
+                  <option value="on-failure">on-failure</option>
+                </select>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-4">
+                <input type="number" id="onfailure" name="onfailure_num" class="form-control"
+                       placeholder="重启的尝试次数"
+                       style="display: none;">
+              </div>
 
-          <form class="form-horizontal form-label-left" novalidate>
-            <div class="item form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Name</label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <input id="name" class="form-control col-md-7 col-xs-12" data-validate-length-range="6"
-                       data-validate-words="2" name="name" placeholder="both name(s) e.g Jon Doe" required="required"
-                       type="text">
-              </div>
-            </div>
-            <div class="item form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email <span class="required">*</span>
-              </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <input type="email" id="email" name="email" required="required" class="form-control col-md-7 col-xs-12">
-              </div>
-            </div>
-            <div class="item form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Confirm Email <span class="required">*</span>
-              </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <input type="email" id="email2" name="confirm_email" data-validate-linked="email" required="required"
-                       class="form-control col-md-7 col-xs-12">
-              </div>
-            </div>
-            <div class="item form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="number">Number <span
-                      class="required">*</span>
-              </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <input type="number" id="number" name="number" required="required" data-validate-minmax="10,100"
-                       class="form-control col-md-7 col-xs-12">
-              </div>
-            </div>
-            <div class="item form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="website">Website URL <span class="required">*</span>
-              </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <input type="url" id="website" name="website" required="required" placeholder="www.website.com"
-                       class="form-control col-md-7 col-xs-12">
-              </div>
-            </div>
-            <div class="item form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="occupation">Occupation <span
-                      class="required">*</span>
-              </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <input id="occupation" type="text" name="occupation" data-validate-length-range="5,20"
-                       class="optional form-control col-md-7 col-xs-12">
-              </div>
-            </div>
-            <div class="item form-group">
-              <label for="password" class="control-label col-md-3">Password</label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <input id="password" type="password" name="password" data-validate-length="6,8"
-                       class="form-control col-md-7 col-xs-12" required="required">
-              </div>
-            </div>
-            <div class="item form-group">
-              <label for="password2" class="control-label col-md-3 col-sm-3 col-xs-12">Repeat Password</label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <input id="password2" type="password" name="password2" data-validate-linked="password"
-                       class="form-control col-md-7 col-xs-12" required="required">
-              </div>
-            </div>
-            <div class="item form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Telephone <span class="required">*</span>
-              </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <input type="tel" id="telephone" name="phone" required="required" data-validate-length-range="8,20"
-                       class="form-control col-md-7 col-xs-12">
-              </div>
             </div>
             <div class="form-group">
               <div class="col-md-6 col-md-offset-3">
-                <button type="submit" class="btn btn-primary">Cancel</button>
-                <button id="send" type="submit" class="btn btn-success">Submit</button>
+                <button type="reset" class="btn btn-primary">重置</button>
+                <button type="submit" class="btn btn-success">提交</button>
               </div>
             </div>
           </form>
@@ -178,7 +249,6 @@
       </div>
     </div>
   </div>
-
 
 
 {% endblock main %}

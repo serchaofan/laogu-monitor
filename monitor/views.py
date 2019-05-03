@@ -5,9 +5,11 @@ from django.conf import settings
 from django.template import loader
 # from pyecharts import *
 import json
+import time
 
 from .serializer import StatusSerializer, ClientHandler
 from .infogetter import InfoGetter
+from .deploy import ImageDeploy
 from .models import *
 
 from . import optimization
@@ -55,6 +57,7 @@ def images_status(request):
 def network_status(request):
     info_getter = InfoGetter()
     network_list = info_getter.local_network_info()
+
     context = dict(
         network_list=network_list,
     )
@@ -120,3 +123,5 @@ def service_data_report(request):
         except IndexError as e:
             print('报错：', e)
     return HttpResponse(json.dumps(client_data_report))
+
+
