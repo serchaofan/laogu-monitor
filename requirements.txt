@@ -1,6 +1,6 @@
 certifi==2019.3.9
 chardet==3.0.4
-Django==2.2
+Django==2.2.8
 docker==3.7.2
 docker-pycreds==0.4.0
 dukpy==0.2.2
